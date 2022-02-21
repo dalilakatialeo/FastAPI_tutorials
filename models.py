@@ -1,4 +1,5 @@
 from enum import Enum
+from optparse import Option
 from typing import List, Optional
 from uuid import UUID, uuid4
 from pydantic import BaseModel
@@ -21,3 +22,8 @@ class User(BaseModel):
     roles: List[Role]
 
 
+class UserUpdateRequest(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    middle_name: Optional[str]
+    roles: Optional[List[Role]]
