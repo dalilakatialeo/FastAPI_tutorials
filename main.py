@@ -1,7 +1,7 @@
 # import FastAPI - it is a python class that provides all the functionality for my API
 from typing import List
 from uuid import UUID, uuid4
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from models import Gender, Role, User
 
@@ -45,12 +45,27 @@ async def root():
 
 # define a route to get all users
 
+
 @app.get("/users")
 async def fetch_users():
     return db
 
-#post requests cant be tested 
+# post requests cant be tested
+
+
 @app.post("/users")
 async def register_user(user: User):
     db.append(user)
-    return {"id" : user.id}
+    return {"id": user.id}
+
+
+@app.delete("/users/{user_id}")
+async def delete_user(user_id: UUID):
+    for user in db:
+        if user.id == user_id:
+            db.remove(user)
+            return {"User deleted successfully"}
+    raise HTTPException(
+        status_code=404,
+        detail=f"user with id: {user_id} does not exist"
+    )
